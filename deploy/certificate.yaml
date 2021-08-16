@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: pod-labeler-webhook-tls
+  namespace: kube-system
+spec:
+  secretName: pod-labeler-webhook-tls
+  privateKey:
+    rotationPolicy: Always
+  commonName: pod-labeler-webhook.cluster.local
+  dnsNames:
+    - pod-labeler-webhook.cluster.local
+    - pod-labeler-webhook.kube-system.svc
+  issuerRef:
+    name: selfsigned-issuer
+    kind: ClusterIssuer

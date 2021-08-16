@@ -1,0 +1,32 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: pod-labeler-webhook
+  namespace: kube-system
+  labels:
+    component: mutating-controller
+  annotations:
+    cert-manager.io/inject-ca-from: kube-system/pod-labeler-webhook-tls
+webhooks:
+  - name: pod-labeler-webhook.cluster.local
+    admissionReviewVersions: ["v1"]
+    sideEffects: None
+    failurePolicy: Fail
+    #namespaceSelector:
+    #  matchLabels:
+    #    test: "true"
+    clientConfig:
+      service:
+        name: pod-labeler-webhook
+        namespace: kube-system
+        path: /mutate/pods
+        port: 8443
+    rules:
+    - apiGroups: [""]
+      resources:
+        - "pods"
+      apiVersions:
+        - v1
+      operations:
+        - CREATE
+        - UPDATE

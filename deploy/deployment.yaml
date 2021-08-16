@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pod-labeler-webhook
+  namespace: kube-system
+  labels:
+    app: pod-labeler-webhook
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: pod-labeler-webhook
+  template:
+    metadata:
+      labels:
+        app: pod-labeler-webhook
+    spec:
+      containers:
+      - name: pod-labeler-webhook
+        image: devonwarren/pod-labeler-webhook:latest
+        ports:
+        - containerPort: 8443
+        resources:
+          limits:
+            cpu: 800m
+            memory: 1Gi
+        env:
+        - name: DEBUG
+          value: "true"
+        volumeMounts:
+        - name: certificate
+          mountPath: /app/ssl
+          readOnly: true
+      volumes:
+      - name: certificate
+        secret:
+          secretName: pod-labeler-webhook-tls
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: pod-labeler-webhook
+  namespace: kube-system
+spec:
+  selector:
+    app: pod-labeler-webhook
+  ports:
+    - protocol: TCP
+      port: 8443
+      targetPort: 8443
