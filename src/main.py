@@ -3,14 +3,13 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 import kubeapi, helpers
 import base64, logging, json
-from pprint import pprint
 
 app = FastAPI()
 
 # change settings based on env variables
 selected_labels = helpers.parse_envvars()['labels']
-pprint(selected_labels)
 
+# basic health endpoint for liveness
 @app.get("/healthz")
 def healthz():
     return "OK"
@@ -20,6 +19,8 @@ def healthz():
 async def mutating_webhook(request: Request):
     # get response body in array format
     body = await request.json()
+    logging.debug("Request body:")
+    logging.debug(body)
 
     # setup initial vars
     namespace_labels = kubeapi.get_namespace_labels(body['request']['namespace'])
@@ -28,7 +29,7 @@ async def mutating_webhook(request: Request):
 
     # loop for all labels selected
     if selected_labels == '*':
-        for label, value in namespace_labels:
+        for label, value in namespace_labels.items():
             # append patches for all nonmatching labels in namespace
             if label not in current_pod_labels or current_pod_labels[label] != value:
                 patchset.append(helpers.label_jsonpatch_patch(label, value))
@@ -52,10 +53,14 @@ async def mutating_webhook(request: Request):
         }
     }
 
-    # add patches is needed
+    # add patches is relevant
     if len(patchset) > 0:
         jsonResponse['response']['patchType'] = 'JSONPatch'
         jsonResponse['response']['patch'] = base64.b64encode( json.dumps(patchset).encode("utf-8") ).decode("utf-8")
+
+    # output full response in debug mode
+    logging.debug("jsonResponse:")
+    logging.debug(str(jsonResponse))
 
     # return admissionreview json response
     return JSONResponse(content=jsonable_encoder(jsonResponse))

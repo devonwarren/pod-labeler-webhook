@@ -11,6 +11,7 @@ LABEL org.label-schema.url="https://github.com/devonwarren/pod-labeler-webhook"
 LABEL org.label-schema.vcs-url="https://github.com/devonwarren/pod-labeler-webhook"
 LABEL org.label-schema.vcs-ref=$VCS_REF
 
+# port for webhook api
 EXPOSE 8443/tcp
 
 # allow verbose logging if set to true
@@ -27,8 +28,8 @@ COPY --chown=webapp:webapp . /app
 # get required dependencies
 RUN pip3 install -r /app/requirements.txt && chown webapp:webapp `which uvicorn`
 
+# run as non-root user
 USER webapp
 
 # uvicorn will run the fastapi app using mounted tls files
-#CMD [ "bash" ]
 ENTRYPOINT [ "uvicorn", "--host", "0.0.0.0", "--port", "8443", "--ssl-keyfile", "/app/ssl/tls.key", "--ssl-certfile", "/app/ssl/tls.crt", "main:app" ]

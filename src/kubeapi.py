@@ -25,9 +25,10 @@ if getenv("DEBUG", "false").lower() == "true":
     logging.info("K8s config info:")
     logging.info(configuration)
 
+# use k8s api to return namespace labels
 def get_namespace_labels(namespace="default"):
     try:
         ret = kubeApi.read_namespace(namespace)
         return ret.metadata.labels
     except ApiException as e:
-        logging.error("K8s connection failed, check service account credentials and settings. Msg:" + e)
+        logging.error("K8s connection failed, check service account credentials and settings. Msg:" + str(e))
