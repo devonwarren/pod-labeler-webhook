@@ -54,8 +54,8 @@ async def mutating_webhook(request: Request):
 
     # add patches is needed
     if len(patchset) > 0:
-        jsonResponse['patchType'] = 'JSONPatch'
-        jsonResponse['patch'] = base64.b64encode( json.dumps(patchset).encode("utf-8") ).decode("utf-8")
+        jsonResponse['response']['patchType'] = 'JSONPatch'
+        jsonResponse['response']['patch'] = base64.b64encode( json.dumps(patchset).encode("utf-8") ).decode("utf-8")
 
     # return admissionreview json response
     return JSONResponse(content=jsonable_encoder(jsonResponse))
