@@ -27,6 +27,8 @@ spec:
         env:
         - name: DEBUG
           value: "true"
+        - name: LABELS
+          value: "*"
         volumeMounts:
         - name: certificate
           mountPath: /app/ssl
@@ -35,6 +37,7 @@ spec:
       - name: certificate
         secret:
           secretName: pod-labeler-webhook-tls
+      serviceAccountName: pod-labeler-webhook
 ---
 apiVersion: v1
 kind: Service

@@ -12,9 +12,9 @@ webhooks:
     admissionReviewVersions: ["v1"]
     sideEffects: None
     failurePolicy: Fail
-    #namespaceSelector:
-    #  matchLabels:
-    #    test: "true"
+    namespaceSelector:
+      matchLabels:
+        test: "true"
     clientConfig:
       service:
         name: pod-labeler-webhook
