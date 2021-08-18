@@ -53,7 +53,7 @@ async def mutating_webhook(request: Request):
         }
     }
 
-    # add patches is relevant
+    # add patches if relevant
     if len(patchset) > 0:
         jsonResponse['response']['patchType'] = 'JSONPatch'
         jsonResponse['response']['patch'] = base64.b64encode( json.dumps(patchset).encode("utf-8") ).decode("utf-8")
