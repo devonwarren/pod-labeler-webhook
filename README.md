@@ -1,7 +1,7 @@
 # Pod Labeler Webhook
 **A Kubernetes Mutating Admission Controller Webhook that will copy labels from a namespace into pods automatically**
 
-A [MutatingAdmissionWebhook](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/) will inject itself in the admission process to intercept changes in objects. In this case this will look at changes to Pod objects specifically. The webhook will take the pod info in and call the kubernetes api with a service to gather the labels from the namespace the pod is in and then re-apply (based on the `LABELS` variable) those labels to the pods.
+A [MutatingAdmissionWebhook](https://kubernetes.io/docs/reference/access-authn-authz/admission-controllers/) will inject itself in the admission process to intercept changes in objects. In this case this will look at changes to Pod objects specifically. The webhook will take the pod info in, take the pod's namespace, and call the kubernetes api with a service account to gather the labels defined inside that namespace, and then re-apply (based on the `LABELS` variable) those labels to the pods.
 
 ## Setup
 
