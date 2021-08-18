@@ -22,11 +22,11 @@ spec:
         - containerPort: 8443
         resources:
           limits:
-            cpu: 800m
-            memory: 1Gi
+            cpu: 600m
+            memory: 600Mi
           requests:
             cpu: 100m
-            memory: 200Mi
+            memory: 100Mi
         env:
         - name: DEBUG
           value: "true"

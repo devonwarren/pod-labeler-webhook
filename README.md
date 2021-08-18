@@ -15,7 +15,7 @@ Apply customizations to the yaml files inside the **deploy** folder as needed
    3. Replace `kube-system` with alternative namespace if installing elsewhere
 3. Modify the `deployment.yaml` file as needed with the following options
    1. Change environment variables as needed (see [Available Variables below](#available-variables))
-   2. Change the replica and resources values as needed depending on how many targeted pods your evironment might have (the defaults are probably fine for anything under 1k)
+   2. Change the replica and resources values as needed depending on how many targeted pods your evironment might have (the defaults are probably fine for anything under 10k)
 4. Modify the `mutatingwebhook.yaml` as needed
    1. Remove the `namespaceSelector` lines if you want all pods targeted (careful as this will include itself/kube-system)
    2. Change the `namespaceSelector` to select the namespaces you want to target (see [namespaceSelector docs](https://kubernetes.io/docs/reference/access-authn-authz/extensible-admission-controllers/#matching-requests-namespaceselector))
